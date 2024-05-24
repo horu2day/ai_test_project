@@ -29,7 +29,10 @@ for root, dirs, files in os.walk(directory):
     for filename in files:
         # Check if the file is a .mp4 file
         if os.path.splitext(filename)[1] in ['.mp4', '.mp3', '.flac', '.wav', '.aac']:
-            video_file_path = os.path.join(root, filename)
+            video_file_path = os.path.join(root, filename).replace("/","\\")
+            
+                
+
             # print(root + " : " + dirs + " : " + filename)
             # Check the file size and load the appropriate Whisper model
             file_size_mb = os.path.getsize(
@@ -45,8 +48,11 @@ for root, dirs, files in os.walk(directory):
                 print(filename + "medium")
 
             # Transcribe the audio from the video file
-
-            result = model.transcribe(video_file_path, language='en')
+            if os.path.exists(video_file_path):
+                result = model.transcribe(video_file_path, language='en')
+            else:
+                print(f"File not found: {video_file_path}")
+            
 
             # Translate each segment
 
